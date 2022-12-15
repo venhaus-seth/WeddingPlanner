@@ -1,0 +1,23 @@
+@{
+    ViewData["Title"] = "Wedding Details";
+}
+@model MyViewModel
+<div>
+    @await Html.PartialAsync("_Navbar")
+
+    <h1 class="mb-3">@Model.Wedding.WedderOne & @Model.Wedding.WedderTwo</h1>
+    <p class="m-2">Date:  <span class="fw-bold"> 
+                        @Model.Wedding.Date.DayOfWeek
+                        @Model.Wedding.Date.Day,
+                        @Model.Wedding.Date.Year at 
+                        @Model.Wedding.Date.Hour 
+                        </span> 
+    </p>
+    <p class="m-2">Guests:</p>
+    <ul>
+        @foreach (Connection u in Model.Wedding.GuestList)
+        {
+            <li>@u.User.FName @u.User.LName</li>
+        }
+    </ul>
+</div>

@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Wedding List";
+}
+@model MyViewModel
+<div>
+    @await Html.PartialAsync("_Navbar")
+
+    <table class="table w-50 m-auto">
+        <tr>
+            <th>Wedding of</th>
+            <th>Date</th>
+            <th>Guest Count</th>
+            <th>Action</th>
+        </tr>
+
+        @foreach (Wedding w in Model.AllWeddings) 
+        {
+        <tr>
+            <td> <a href="/weddings/@w.WeddingId">@w.WedderOne & @w.WedderTwo</a> </td>
+            <td>@w.Date</td>
+            <td>@w.GuestList.Count()</td>
+            @if (w.UserId == Context.Session.GetInt32("UserId"))
+            {
+                <form asp-action="DestroyWedding" asp-controller="Home" asp-route-WeddingId="@w.WeddingId" method="post">
+                    <td><button type="submit" class="text-dark bg-danger rounded">Delete</button></td>
+                </form>
+            } 
+
+            else if(w.GuestList.Any(c=>c.UserId == Context.Session.GetInt32("UserId"))){
+                <form asp-action="UNRSVP" asp-controller="Home" asp-route-WeddingId="@w.WeddingId" asp-route-UserId=@Context.Session.GetInt32("UserId") method="post">
+                    <td><button type="submit" class="text-dark bg-warning rounded">Un-RSVP</button></td>
+                </form>
+            } 
+
+            else {
+                <form asp-action="RSVP" asp-controller="Home" asp-route-WeddingId="@w.WeddingId" asp-route-UserId=@Context.Session.GetInt32("UserId") method="post">
+                    <td><button type="submit" class="text-dark bg-success rounded">RSVP</button></td>
+                </form>
+            }
+            
+        </tr>
+        }
+    </table>
+</div>
